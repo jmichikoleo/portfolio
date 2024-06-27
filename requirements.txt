@@ -1,0 +1,7 @@
+﻿streamlit
+pandas
+Matplotlib
+Plotly
+Altair
+yfinance
+datetime

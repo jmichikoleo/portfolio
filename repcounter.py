@@ -35,7 +35,7 @@ def get_workouts(user_id):
 st.session_state.setdefault("authenticated", False)
 
 def authenticate(username, password):
-    return username == "user" and password == "pass"
+    return username == "michikoleo" and password == "michikoleo"
 
 def login():
     with st.form("Login"):

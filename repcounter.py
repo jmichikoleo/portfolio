@@ -124,4 +124,7 @@ else:
 
     elif selected == "Logout":
         st.session_state["authenticated"] = False
+        st.session_state["user_id"] = None  # Clear the user_id too
+        st.success("Logged out successfully!")
         st.experimental_rerun()
+

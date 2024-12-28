@@ -108,7 +108,7 @@ else:
                 if data.empty:
                     st.write(f"No data for {title.lower()}.")
                 else:
-                    fig = px.bar(
+                    fig = px.line(
                         data,
                         x="date",
                         y="reps",
@@ -117,6 +117,7 @@ else:
                         labels={"reps": "Reps", "date": "Date"},
                     )
                     st.plotly_chart(fig)
+
 
             create_graph(weekly, "Weekly Progress")
             create_graph(monthly, "Monthly Progress")

@@ -6,3 +6,4 @@ Altair
 yfinance
 datetime
 requests
+sqlite3

@@ -1,4 +1,4 @@
-﻿streamlit
+op﻿streamlit
 pandas
 Matplotlib
 Plotly
@@ -8,3 +8,4 @@ datetime
 requests
 streamlit-option-menu
 xlrd
+openpyxl

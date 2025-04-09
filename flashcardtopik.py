@@ -31,9 +31,15 @@ st.markdown("""
 def load_flashcards():
     try:
         df = pd.read_csv("flashcards.csv")
+        df.columns = df.columns.str.strip()  # Remove extra spaces from column names
         if "Korean" not in df.columns or "English" not in df.columns:
             st.error("⚠️ CSV must have 'Korean' and 'English' columns.")
             return []
+
+        # Clean up values: remove quotes, trailing commas and whitespace
+        df["English"] = df["English"].astype(str).str.strip('", ').str.strip()
+        df["Korean"] = df["Korean"].astype(str).str.strip()
+
         return df.to_dict(orient="records")
     except FileNotFoundError:
         st.error("⚠️ flashcards.csv not found! Please make sure it's in the same folder.")
@@ -60,7 +66,10 @@ st.session_state.direction = direction
 
 search_term = st.sidebar.text_input("Search a word")
 if search_term:
-    filtered_cards = [card for card in flashcards if search_term.lower() in card["Korean"].lower() or search_term.lower() in card["English"].lower()]
+    filtered_cards = [
+        card for card in flashcards
+        if search_term.lower() in card["Korean"].lower() or search_term.lower() in card["English"].lower()
+    ]
     if filtered_cards:
         flashcards = filtered_cards
         st.session_state.index = 0
@@ -84,19 +93,18 @@ if st.session_state.get("show_answer", False):
     st.markdown(f"<h3>{answer}</h3>", unsafe_allow_html=True)
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("correct"):
+        if st.button("✅ I got it right"):
             st.session_state.correct += 1
             st.session_state.total += 1
             st.session_state.index = (st.session_state.index + 1) % len(flashcards)
             st.session_state.show_answer = False
             st.rerun()
     with col2:
-        if st.button("wrong"):
+        if st.button("❌ I got it wrong"):
             st.session_state.total += 1
             st.session_state.index = (st.session_state.index + 1) % len(flashcards)
             st.session_state.show_answer = False
             st.rerun()
-
 
 if st.session_state.total > 0:
     score = st.session_state.correct / st.session_state.total * 100

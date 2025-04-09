@@ -1,7 +1,6 @@
 import streamlit as st
-import random
 import pandas as pd
-
+import random
 
 st.set_page_config(page_title="Flashcards")
 st.markdown("""
@@ -14,15 +13,18 @@ st.markdown("""
 
 def load_flashcards():
     try:
-        df = pd.read_csv("flashcards.csv")  
-        return df.to_dict(orient="records") 
+        df = pd.read_excel("flashcards.xlsx")  # <- Reading from Excel
+        return df.to_dict(orient="records")
     except FileNotFoundError:
-        st.error("⚠️ flashcards.csv not found! Please add the file to the project folder.")
+        st.error("⚠️ flashcards.xlsx not found! Please add it to your folder.")
+        return []
+    except Exception as e:
+        st.error(f"⚠️ Error reading Excel file: {e}")
         return []
 
 flashcards = load_flashcards()
 if not flashcards:
-    st.stop()  
+    st.stop()
 
 random.shuffle(flashcards)
 
@@ -32,12 +34,4 @@ if "index" not in st.session_state:
 card = flashcards[st.session_state.index]
 
 st.title("Flashcards")
-
-st.markdown(f"<h2>{card['Korean']}</h2>", unsafe_allow_html=True)
-
-if st.button("Show Answer 💡"):
-    st.markdown(f"<h3>{card['English']}</h3>", unsafe_allow_html=True)
-
-if st.button("Next ➡️"):
-    st.session_state.index = (st.session_state.index + 1) % len(flashcards)
-    st.rerun()
+st.markdown(f"<h2>{card['Korean']}</h2>", unsafe_allow_html

@@ -8,12 +8,14 @@ st.markdown("""
     <style>
         body {
             background-color: #ffe4e1;
+            color: black;
         }
         .stApp {
             background-color: #ffe4e1;
+            color: black;
         }
-        h1, h2, h3 {
-            color: #4b0082 !important;
+        h1, h2, h3, .stMarkdown, .css-1v0mbdj, .css-ffhzg2 {
+            color: black !important;
             text-align: center;
         }
         .stButton>button {
@@ -31,12 +33,11 @@ st.markdown("""
 def load_flashcards():
     try:
         df = pd.read_csv("flashcards.csv")
-        df.columns = df.columns.str.strip()  # Remove extra spaces from column names
+        df.columns = df.columns.str.strip() 
         if "Korean" not in df.columns or "English" not in df.columns:
             st.error("⚠️ CSV must have 'Korean' and 'English' columns.")
             return []
 
-        # Clean up values: remove quotes, trailing commas and whitespace
         df["English"] = df["English"].astype(str).str.strip('", ').str.strip()
         df["Korean"] = df["Korean"].astype(str).str.strip()
 

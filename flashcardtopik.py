@@ -30,13 +30,13 @@ st.markdown("""
 @st.cache_data
 def load_flashcards():
     try:
-        df = pd.read_excel("flashcards.xlsx")
+        df = pd.read_csv("flashcards.csv")
         if "Korean" not in df.columns or "English" not in df.columns:
-            st.error("⚠️ Excel must have 'Korean' and 'English' columns.")
+            st.error("⚠️ CSV must have 'Korean' and 'English' columns.")
             return []
         return df.to_dict(orient="records")
     except FileNotFoundError:
-        st.error("⚠️ flashcards.xlsx not found! Please make sure it's in the same folder.")
+        st.error("⚠️ flashcards.csv not found! Please make sure it's in the same folder.")
         return []
     except Exception as e:
         st.error(f"⚠️ Error loading flashcards: {e}")
@@ -50,20 +50,56 @@ if "index" not in st.session_state:
     random.shuffle(flashcards)
     st.session_state.index = 0
     st.session_state.show_answer = False
+    st.session_state.correct = 0
+    st.session_state.total = 0
+    st.session_state.direction = "Korean to English"
+
+st.sidebar.title("Options")
+direction = st.sidebar.radio("Flashcard Direction", ["Korean to English", "English to Korean"])
+st.session_state.direction = direction
+
+search_term = st.sidebar.text_input("Search a word")
+if search_term:
+    filtered_cards = [card for card in flashcards if search_term.lower() in card["Korean"].lower() or search_term.lower() in card["English"].lower()]
+    if filtered_cards:
+        flashcards = filtered_cards
+        st.session_state.index = 0
+    else:
+        st.warning("No matches found.")
 
 card = flashcards[st.session_state.index]
 
 st.title("Flashcards")
-st.markdown(f"<h2>{card['Korean']}</h2>", unsafe_allow_html=True)
+if st.session_state.direction == "Korean to English":
+    st.markdown(f"<h2>{card['Korean']}</h2>", unsafe_allow_html=True)
+    answer = card['English']
+else:
+    st.markdown(f"<h2>{card['English']}</h2>", unsafe_allow_html=True)
+    answer = card['Korean']
 
 if st.button("Show Answer 💡"):
     st.session_state.show_answer = True
 
 if st.session_state.get("show_answer", False):
-    st.markdown(f"<h3>{card['English']}</h3>", unsafe_allow_html=True)
+    st.markdown(f"<h3>{answer}</h3>", unsafe_allow_html=True)
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("correct"):
+            st.session_state.correct += 1
+            st.session_state.total += 1
+            st.session_state.index = (st.session_state.index + 1) % len(flashcards)
+            st.session_state.show_answer = False
+            st.rerun()
+    with col2:
+        if st.button("wrong"):
+            st.session_state.total += 1
+            st.session_state.index = (st.session_state.index + 1) % len(flashcards)
+            st.session_state.show_answer = False
+            st.rerun()
 
-if st.button("Next ➡️"):
-    st.session_state.index = (st.session_state.index + 1) % len(flashcards)
-    st.session_state.show_answer = False
-    st.rerun()
+
+if st.session_state.total > 0:
+    score = st.session_state.correct / st.session_state.total * 100
+    st.sidebar.metric("Accuracy", f"{score:.1f}%")
+    st.sidebar.write(f"{st.session_state.correct} out of {st.session_state.total} correct")
 

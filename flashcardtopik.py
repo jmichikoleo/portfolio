@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import random
 
-st.set_page_config(page_title="Flashcards", page_icon="🃏", layout="centered")
+st.set_page_config(page_title="Flashcards", page_icon="♡", layout="centered")
 
 st.markdown("""
     <style>
@@ -30,13 +30,13 @@ st.markdown("""
 @st.cache_data
 def load_flashcards():
     try:
-        df = pd.read_excel("flashcards.xlsx")  
+        df = pd.read_excel("flashcards.xlsx")
         if "Korean" not in df.columns or "English" not in df.columns:
             st.error("⚠️ Excel must have 'Korean' and 'English' columns.")
             return []
         return df.to_dict(orient="records")
     except FileNotFoundError:
-        st.error("⚠️ flashcards.xlsx not found! Add it to your project folder.")
+        st.error("⚠️ flashcards.xlsx not found! Please make sure it's in the same folder.")
         return []
     except Exception as e:
         st.error(f"⚠️ Error loading flashcards: {e}")
@@ -66,3 +66,4 @@ if st.button("Next ➡️"):
     st.session_state.index = (st.session_state.index + 1) % len(flashcards)
     st.session_state.show_answer = False
     st.rerun()
+

@@ -13,7 +13,7 @@ st.markdown("""
 
 def load_flashcards():
     try:
-        df = pd.read_excel("flashcards.xls")
+        df = pd.read_excel("flashcards.xls", engine="xlrd")
         return df.to_dict(orient="records")
     except FileNotFoundError:
         st.error("⚠️ flashcards.xls not found! Please add it to your folder.")

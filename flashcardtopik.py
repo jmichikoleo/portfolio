@@ -34,4 +34,4 @@ if "index" not in st.session_state:
 card = flashcards[st.session_state.index]
 
 st.title("Flashcards")
-st.markdown(f"<h2>{card['Korean']}</h2>", unsafe_allow_html
+st.markdown(f"<h2>{card['Korean']}</h2>", unsafe_allow_html=True)

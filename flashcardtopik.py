@@ -86,21 +86,21 @@ else:
     st.markdown(f"<h2>{card['English']}</h2>", unsafe_allow_html=True)
     answer = card['Korean']
 
-if st.button("Show Answer 💡"):
+if st.button("show answer"):
     st.session_state.show_answer = True
 
 if st.session_state.get("show_answer", False):
     st.markdown(f"<h3>{answer}</h3>", unsafe_allow_html=True)
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("✅ I got it right"):
+        if st.button("correct"):
             st.session_state.correct += 1
             st.session_state.total += 1
             st.session_state.index = (st.session_state.index + 1) % len(flashcards)
             st.session_state.show_answer = False
             st.rerun()
     with col2:
-        if st.button("❌ I got it wrong"):
+        if st.button("wrong"):
             st.session_state.total += 1
             st.session_state.index = (st.session_state.index + 1) % len(flashcards)
             st.session_state.show_answer = False

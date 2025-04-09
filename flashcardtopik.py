@@ -30,7 +30,7 @@ st.markdown("""
 @st.cache_data
 def load_flashcards():
     try:
-        df = pd.read_excel("flashcards.xlsx")  # <- your Excel file
+        df = pd.read_excel("flashcards.xls", engine="xlrd")  
         if "Korean" not in df.columns or "English" not in df.columns:
             st.error("⚠️ Excel must have 'Korean' and 'English' columns.")
             return []

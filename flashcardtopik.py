@@ -5,10 +5,12 @@ import random
 st.set_page_config(page_title="Flashcards")
 st.markdown("""
     <style>
-        .main {background-color: #ffc0cb;}
-        h1, h2, h3, p {color: #fff !important; text-align: center;}
-        .stButton button {background-color: #ff69b4 !important; color: white !important; border-radius: 10px; font-size: 20px;}
-    </style>
+    .main {background-color: #ffc0cb;}
+    h1, h2, h3, p {
+        color: black !important;
+        text-align: center;
+    }
+</style>
 """, unsafe_allow_html=True)
 
 def load_flashcards():
